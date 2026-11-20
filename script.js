@@ -7,7 +7,7 @@ const I18N = {
         modalSuccessTitle: "Niveau Validé ! 🔥",
         modalSuccessDesc: "Prêt à oser le niveau suivant ?",
         modalFinalTitle: "Parcours Oze Tour Terminé ! 🏆",
-        modalFinalDesc: "Félicitations ! Vous avez relevé tous les défis jeunesse et avenir avec Abigaïl Alexandre !",
+        modalFinalDesc: "Félicitations ! Vous avez complété tous les niveaux et les bonus du slogan avec Abigaïl Alexandre !",
         nextBtn: "Niveau Suivant",
         replayBtn: "Rejouer depuis le début",
         timeLabel: "Temps réalisé :"
@@ -20,14 +20,14 @@ const I18N = {
         modalSuccessTitle: "Level Validated! 🔥",
         modalSuccessDesc: "Ready to dare the next level?",
         modalFinalTitle: "Oze Tour Completed! 🏆",
-        modalFinalDesc: "Congratulations! You conquered all youth and future challenges with Abigaïl Alexandre!",
+        modalFinalDesc: "Congratulations! You conquered all levels and slogan bonuses with Abigaïl Alexandre!",
         nextBtn: "Next Level",
         replayBtn: "Play Again from Start",
         timeLabel: "Time taken:"
     }
 };
 
-// 20 Niveaux de 6 mots courts chacun autour de la jeunesse, l'audace (oser) et l'avenir (FR & EN)
+// 20 Niveaux principaux + 2 Niveaux Bonus dédiés au slogan « OU PA TRO JEN POU OU AJI OSE KONNYA »
 const LEVELS = [
     {
         title: { fr: "Niveau 1 : Esprit Jeunesse", en: "Level 1: Youth Spirit" },
@@ -168,6 +168,26 @@ const LEVELS = [
             fr: ["OZE", "TOUR", "ABIGAIL", "JEUNE", "OSER", "AVENIR"],
             en: ["OZE", "TOUR", "ABIGAIL", "YOUTH", "DARE", "FUTURE"]
         }
+    },
+    {
+        title: {
+            fr: "Bonus 1 : OU PA TRO JEN",
+            en: "Bonus 1: OU PA TRO JEN"
+        },
+        words: {
+            fr: ["OU", "PA", "TRO", "JEN", "POU", "OU"],
+            en: ["OU", "PA", "TRO", "JEN", "POU", "OU"]
+        }
+    },
+    {
+        title: {
+            fr: "Bonus 2 : POU OU AJI OSE KONNYA",
+            en: "Bonus 2: POU OU AJI OSE KONNYA"
+        },
+        words: {
+            fr: ["POU", "OU", "AJI", "OSE", "KONNYA", "TOUR"],
+            en: ["POU", "OU", "AJI", "OSE", "KONNYA", "TOUR"]
+        }
     }
 ];
 
@@ -184,7 +204,6 @@ let timerInterval = null;
 let secondsElapsed = 0;
 const GRID_SIZE = 10;
 
-// Normalise les accents pour la grille (ex: Ï -> I, É -> E)
 function normalizeWord(word) {
     return word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, '').toUpperCase();
 }
@@ -282,7 +301,7 @@ function generateGrid(words) {
 
         while (!placed && attempts < 150) {
             attempts++;
-            const direction = Math.floor(Math.random() * 3); // 0: Horizontal, 1: Vertical, 2: Diagonal
+            const direction = Math.floor(Math.random() * 3);
             let row = Math.floor(Math.random() * GRID_SIZE);
             let col = Math.floor(Math.random() * GRID_SIZE);
 
@@ -410,7 +429,6 @@ function updateSelection(r, c) {
     let stepR = dr === 0 ? 0 : dr / steps;
     let stepC = dc === 0 ? 0 : dc / steps;
 
-    // Verrouille strictement les mouvements aux lignes droites (horizontale, verticale, diagonale à 45°)
     if (Math.abs(stepR) !== Math.abs(stepC) && stepR !== 0 && stepC !== 0) {
         return;
     }
